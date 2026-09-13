@@ -1,0 +1,119 @@
+import { Href, Slot, router, usePathname } from 'expo-router';
+import { Image } from 'expo-image';
+import { useEffect, useRef } from 'react';
+import { Animated, ImageSourcePropType, Pressable, StyleSheet, Text, View } from 'react-native';
+
+const homeIcon = require('../../assets/BiosphereQuestAssets/Home Icon.png');
+const coursesIcon = require('../../assets/BiosphereQuestAssets/Courses Icon.png');
+const gamesIcon = require('../../assets/BiosphereQuestAssets/Games Icon.png');
+const profileIcon = require('../../assets/BiosphereQuestAssets/Profile Icon.png');
+
+const tabs = [
+  { label: 'Home', route: '/home', icon: homeIcon },
+  { label: 'Courses', route: '/explore', icon: coursesIcon },
+  { label: 'Games', route: '/games', icon: gamesIcon },
+  { label: 'Profile', route: '/profile', icon: profileIcon },
+] as const;
+
+export default function AppTabs() {
+  const pathname = usePathname();
+  const entrance = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    entrance.setValue(0);
+    Animated.spring(entrance, { toValue: 1, useNativeDriver: true, tension: 55, friction: 9 }).start();
+  }, [entrance, pathname]);
+
+  return (
+    <View style={styles.container}>
+      <Animated.View
+        style={[
+          styles.page,
+          {
+            opacity: entrance,
+            transform: [
+              {
+                translateY: entrance.interpolate({
+                  inputRange: [0, 1],
+                  outputRange: [12, 0],
+                }),
+              },
+            ],
+          },
+        ]}
+      >
+        <Slot />
+      </Animated.View>
+
+      <View style={styles.navigation}>
+        {tabs.map((tab) => {
+          const active = pathname === tab.route;
+          return (
+            <NavigationItem
+              key={tab.route}
+              label={tab.label}
+              icon={tab.icon}
+              active={active}
+              onPress={() => router.replace(tab.route as Href)}
+            />
+          );
+        })}
+      </View>
+    </View>
+  );
+}
+
+function NavigationItem({
+  label,
+  icon,
+  active,
+  onPress,
+}: {
+  label: string;
+  icon: ImageSourcePropType;
+  active: boolean;
+  onPress: () => void;
+}) {
+  const motion = useRef(new Animated.Value(active ? 1 : 0)).current;
+
+  useEffect(() => {
+    Animated.spring(motion, { toValue: active ? 1 : 0, useNativeDriver: true, tension: 70, friction: 8 }).start();
+  }, [active, motion]);
+
+  const iconScale = motion.interpolate({ inputRange: [0, 1], outputRange: [0.88, 1.08] });
+  const iconLift = motion.interpolate({ inputRange: [0, 1], outputRange: [3, -2] });
+
+  return (
+    <Pressable onPress={onPress} style={styles.tab}>
+      <Animated.View style={[styles.activeBackground, { opacity: motion }]} />
+      <Animated.View style={{ transform: [{ scale: iconScale }, { translateY: iconLift }] }}>
+        <Image source={icon} style={styles.icon} contentFit="contain" />
+      </Animated.View>
+      <Text style={styles.label}>{label}</Text>
+    </Pressable>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: { flex: 1 },
+  page: { flex: 1 },
+  navigation: {
+    backgroundColor: '#050505',
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    paddingHorizontal: 12,
+    paddingTop: 8,
+    paddingBottom: 10,
+  },
+  tab: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    minWidth: 76,
+    paddingHorizontal: 14,
+    paddingVertical: 5,
+    borderRadius: 34,
+    position: 'relative',
+  },
+  activeBackground: { ...StyleSheet.absoluteFill, backgroundColor: '#003d3d', borderRadius: 34 },  icon: { width: 56, height: 56 },
+  label: { color: '#a9dcff', fontSize: 16, fontWeight: '800', marginTop: 2 },
+});
