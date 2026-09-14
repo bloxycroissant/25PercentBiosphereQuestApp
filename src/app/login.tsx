@@ -1,7 +1,9 @@
 import { GradientSafeAreaView as SafeAreaView } from "@/components/gradient-safe-area";
 import { Ionicons } from "@expo/vector-icons";
+import { makeRedirectUri } from "expo-auth-session";
 import { Image } from "expo-image";
 import { Link, router } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import {
   Alert,
@@ -11,6 +13,8 @@ import {
   TextInput,
   View,
 } from "react-native";
+import { supabase } from "../lib/supabase";
+WebBrowser.maybeCompleteAuthSession();
 
 const logo = require("../../assets/BiosphereQuestAssets/Biosphere Quest Logo.png");
 const astro = require("../../assets/BiosphereQuestAssets/Astro (Biosphere Quest Mascot).png");
@@ -21,6 +25,31 @@ export default function LoginScreen() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const handleGoogleLogin = async () => {
+    try {
+      const redirectUrl = makeRedirectUri();
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: redirectUrl,
+          skipBrowserRedirect: true,
+        },
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        const result = await WebBrowser.openAuthSessionAsync(
+          data.url,
+          redirectUrl,
+        );
+        if (result.type === "success") {
+          console.log("Successfully logged in!");
+        }
+      }
+    } catch (err) {
+      console.error("Login Error:", err);
+    }
+  };
 
   const handleLogin = () => {
     if (!email.trim()) {
@@ -67,8 +96,6 @@ export default function LoginScreen() {
           autoCapitalize="none"
           placeholder="you@email.com"
         />
-
-        {/* Password Field with Eye Toggle */}
         <View style={styles.field}>
           <Text style={styles.label}>PASSWORD</Text>
           <View style={styles.inputContainer}>
@@ -105,7 +132,7 @@ export default function LoginScreen() {
           <View style={styles.line} />
         </View>
 
-        <Pressable style={styles.google}>
+        <Pressable style={styles.google} onPress={handleGoogleLogin}>
           <Image
             source={googleLogo}
             style={styles.googleLogo}
