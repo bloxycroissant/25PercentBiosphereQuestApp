@@ -108,12 +108,6 @@ export default function HomeScreen() {
             tags={['🌍 Earth Science', '✕ Pre-Algebra']}
             onPress={() => router.push('/explore')}
           />
-
-          {/* About Us Card (Non-clickable) */}
-          <View style={styles.about}>
-            <Text style={styles.aboutTitle}>About Us</Text>
-            <Text style={styles.aboutSub}>Learn more about Biosphere Quest</Text>
-          </View>
         </Animated.View>
       </ScrollView>
     </SafeAreaView>
@@ -198,7 +192,4 @@ const styles = StyleSheet.create({
   viewText: { color: '#fff', fontWeight: '900', fontSize: 11 },
   tags: { flexDirection: 'row', gap: 7, marginTop: 7 },
   tag: { color: '#fff', borderWidth: 1, borderRadius: 12, paddingHorizontal: 8, paddingVertical: 3, fontSize: 9, fontWeight: '800' },
-  about: { backgroundColor: '#168c68', borderColor: '#42df9a', borderWidth: 1, borderRadius: 18, padding: 14, marginTop: 12 },
-  aboutTitle: { color: '#fff', fontSize: 19, fontWeight: '900' },
-  aboutSub: { color: '#d0f8e6', fontSize: 11, marginTop: 2 },
 });

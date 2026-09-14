@@ -43,7 +43,7 @@ export default function GamesScreen() {
             <View style={styles.featureCopy}>
               <Text style={styles.featureTag}>✦ FEATURED</Text>
               <Text style={styles.featureTitle}>Math & Science Quiz</Text>
-              <Text style={styles.featureDetails}>🧪 Chemistry · Physics · Calculus</Text>
+              <Text style={styles.featureDetails}>🧪 Math · Science</Text>
               <Text style={styles.featureXp}>🔥 +150 XP · 5 questions · ~3 min</Text>
             </View>
             <Text style={styles.trophy}>🏆</Text>

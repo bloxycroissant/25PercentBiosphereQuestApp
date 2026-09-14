@@ -24,4 +24,4 @@ export const achievements: Achievement[] = [
   { id: 12, title: 'Master Explorer', category: 'Grade Progression & Leveling Up', description: 'Complete 50 total lesson modules across math, science, and vocabulary.', icon: '🔭', accent: '#f0c34c', xp: 1000, unlocked: false },
 ];
 
-export const currentProgress = { xp: 120, level: 2, nextLevelXp: 200, lessons: 1, streak: 0 };
+export const currentProgress = { xp: 0, level: 1, nextLevelXp: 200, lessons: 0, streak: 0 };

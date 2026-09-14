@@ -15,14 +15,14 @@ const tabs = [
   { label: 'Profile', route: '/profile', icon: profileIcon },
 ] as const;
 
-export default function AppTabs() {
+export default function MobileNavigation() {
   const pathname = usePathname();
   const entrance = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     entrance.setValue(0);
     Animated.spring(entrance, { toValue: 1, useNativeDriver: true, tension: 55, friction: 9 }).start();
-  }, [entrance, pathname]); // ✅ Updated dependency array
+  }, [entrance, pathname]);
 
   return (
     <View style={styles.container}>
@@ -80,8 +80,8 @@ function NavigationItem({
     Animated.spring(motion, { toValue: active ? 1 : 0, useNativeDriver: true, tension: 70, friction: 8 }).start();
   }, [active, motion]);
 
-  const iconScale = motion.interpolate({ inputRange: [0, 1], outputRange: [0.88, 1.08] });
-  const iconLift = motion.interpolate({ inputRange: [0, 1], outputRange: [3, -2] });
+  const iconScale = motion.interpolate({ inputRange: [0, 1], outputRange: [0.92, 1.04] });
+  const iconLift = motion.interpolate({ inputRange: [0, 1], outputRange: [2, -1] });
 
   return (
     <Pressable onPress={onPress} style={styles.tab}>
@@ -101,20 +101,20 @@ const styles = StyleSheet.create({
     backgroundColor: '#050505',
     flexDirection: 'row',
     justifyContent: 'space-around',
-    paddingHorizontal: 12,
-    paddingTop: 8,
-    paddingBottom: 10,
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingTop: 6,
+    paddingBottom: 8,
   },
   tab: {
     alignItems: 'center',
     justifyContent: 'center',
-    minWidth: 76,
-    paddingHorizontal: 14,
-    paddingVertical: 5,
-    borderRadius: 34,
+    flex: 1,
+    paddingVertical: 6,
+    borderRadius: 24,
     position: 'relative',
   },
-  activeBackground: { ...StyleSheet.absoluteFill, backgroundColor: '#003d3d', borderRadius: 34 },
-  icon: { width: 56, height: 56 },
-  label: { color: '#a9dcff', fontSize: 16, fontWeight: '800', marginTop: 2 },
+  activeBackground: { ...StyleSheet.absoluteFill, backgroundColor: '#003d3d', borderRadius: 24 },
+  icon: { width: 28, height: 28 },
+  label: { color: '#a9dcff', fontSize: 12, fontWeight: '700', marginTop: 3 },
 });
