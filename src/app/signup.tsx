@@ -5,7 +5,10 @@ import { Link, router } from "expo-router";
 import { useState } from "react";
 import {
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -62,104 +65,121 @@ export default function SignUpScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.content}>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.back}>‹ Back</Text>
-        </Pressable>
-
-        <View style={styles.mascots}>
-          <Image source={astro} style={styles.mascot} contentFit="contain" />
-          <Image source={logo} style={styles.logo} contentFit="contain" />
-          <Image source={stella} style={styles.mascot} contentFit="contain" />
-        </View>
-
-        <Text style={styles.brand}>Biosphere Quest</Text>
-        <Text style={styles.tagline}>Rocket your knowledge to the stars</Text>
-
-        <Text style={styles.title}>Create your account</Text>
-        <Text style={styles.subtitle}>Start learning for free today</Text>
-
-        <Text style={styles.sectionLabel}>PICK YOUR LESSONS</Text>
-
-        <View style={styles.subjects}>
-          {subjects.map((subject) => {
-            const selected = selectedSubjects.includes(subject);
-            return (
-              <Pressable
-                key={subject}
-                onPress={() => toggleSubject(subject)}
-                style={[styles.subject, selected && styles.subjectSelected]}
-              >
-                <Text
-                  style={[
-                    styles.subjectText,
-                    selected && styles.subjectTextSelected,
-                  ]}
-                >
-                  {selected ? "✓ " : ""}
-                  {subject}
-                </Text>
-              </Pressable>
-            );
-          })}
-        </View>
-
-        <Text style={styles.selectionHint}>
-          {selectedSubjects.length} subject
-          {selectedSubjects.length === 1 ? "" : "s"} selected
-        </Text>
-
-        <Field
-          label="Full name"
-          value={name}
-          onChangeText={setName}
-          placeholder="Your full name"
-        />
-        <Field
-          label="Email"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholder="you@email.com"
-        />
-
-        {/* Password Field with Eye Toggle */}
-        <View style={styles.field}>
-          <Text style={styles.label}>Password</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-              placeholder="Min. 8 characters"
-              placeholderTextColor="#aebee0"
-              style={styles.passwordInput}
-            />
-            <Pressable
-              onPress={() => setShowPassword(!showPassword)}
-              style={styles.eyeIcon}
-            >
-              <Ionicons
-                name={showPassword ? "eye" : "eye-off"}
-                size={20}
-                color="#aebee0"
-              />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.content}>
+            <Pressable onPress={() => router.back()}>
+              <Text style={styles.back}>‹ Back</Text>
             </Pressable>
+
+            <View style={styles.mascots}>
+              <Image
+                source={astro}
+                style={styles.mascot}
+                contentFit="contain"
+              />
+              <Image source={logo} style={styles.logo} contentFit="contain" />
+              <Image
+                source={stella}
+                style={styles.mascot}
+                contentFit="contain"
+              />
+            </View>
+
+            <Text style={styles.brand}>Biosphere Quest</Text>
+            <Text style={styles.tagline}>
+              Rocket your knowledge to the stars
+            </Text>
+
+            <Text style={styles.title}>Create your account</Text>
+            <Text style={styles.subtitle}>Start learning for free today</Text>
+
+            <Text style={styles.sectionLabel}>PICK YOUR LESSONS</Text>
+
+            <View style={styles.subjects}>
+              {subjects.map((subject) => {
+                const selected = selectedSubjects.includes(subject);
+                return (
+                  <Pressable
+                    key={subject}
+                    onPress={() => toggleSubject(subject)}
+                    style={[styles.subject, selected && styles.subjectSelected]}
+                  >
+                    <Text
+                      style={[
+                        styles.subjectText,
+                        selected && styles.subjectTextSelected,
+                      ]}
+                    >
+                      {selected ? "✓ " : ""}
+                      {subject}
+                    </Text>
+                  </Pressable>
+                );
+              })}
+            </View>
+
+            <Text style={styles.selectionHint}>
+              {selectedSubjects.length} subject
+              {selectedSubjects.length === 1 ? "" : "s"} selected
+            </Text>
+
+            <Field
+              label="Full name"
+              value={name}
+              onChangeText={setName}
+              placeholder="Your full name"
+            />
+            <Field
+              label="Email"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholder="you@email.com"
+            />
+
+            {/* Password Field with Eye Toggle */}
+            <View style={styles.field}>
+              <Text style={styles.label}>Password</Text>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                  placeholder="Min. 8 characters"
+                  placeholderTextColor="#aebee0"
+                  style={styles.passwordInput}
+                />
+                <Pressable
+                  onPress={() => setShowPassword(!showPassword)}
+                  style={styles.eyeIcon}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye" : "eye-off"}
+                    size={20}
+                    color="#aebee0"
+                  />
+                </Pressable>
+              </View>
+            </View>
+
+            <Pressable onPress={handleSignUp} style={styles.primary}>
+              <Text style={styles.primaryText}>Start Learning Free</Text>
+            </Pressable>
+
+            <Text style={styles.footer}>
+              Already have an account?{" "}
+              <Link href="/login" style={styles.link}>
+                Log In
+              </Link>
+            </Text>
           </View>
-        </View>
-
-        <Pressable onPress={handleSignUp} style={styles.primary}>
-          <Text style={styles.primaryText}>Start Learning Free</Text>
-        </Pressable>
-
-        <Text style={styles.footer}>
-          Already have an account?{" "}
-          <Link href="/login" style={styles.link}>
-            Log In
-          </Link>
-        </Text>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -183,10 +203,9 @@ function Field({
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#091426" },
   content: {
-    flex: 1,
     paddingHorizontal: 24,
     paddingVertical: 10,
-    justifyContent: "space-evenly",
+    gap: 8,
   },
   back: { color: "#e582ff", fontWeight: "800" },
   mascots: {
@@ -254,9 +273,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#6258ff",
     borderRadius: 11,
     alignItems: "center",
-    padding: 14,
+    padding: 12,
   },
-  primaryText: { color: "#fff", fontSize: 16, fontWeight: "900" },
+  primaryText: { color: "#fff", fontSize: 15, fontWeight: "900" },
   footer: { color: "#c7d0e8", textAlign: "center", fontWeight: "800" },
   link: { color: "#63e1e8", fontWeight: "900" },
 });

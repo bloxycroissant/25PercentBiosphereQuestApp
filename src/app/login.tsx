@@ -7,7 +7,10 @@ import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import {
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   Pressable,
+  ScrollView,
   StyleSheet,
   Text,
   TextInput,
@@ -66,88 +69,105 @@ export default function LoginScreen() {
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <View style={styles.content}>
-        <Pressable onPress={() => router.back()}>
-          <Text style={styles.back}>‹ Back</Text>
-        </Pressable>
-
-        <View style={styles.mascots}>
-          <Image source={astro} style={styles.mascot} contentFit="contain" />
-          <Image source={logo} style={styles.logo} contentFit="contain" />
-          <Image source={stella} style={styles.mascot} contentFit="contain" />
-        </View>
-
-        <Text style={styles.brand}>Biosphere Quest</Text>
-        <Text style={styles.tagline}>Rocket your knowledge to the stars</Text>
-
-        <View style={styles.grades}>
-          <Text style={styles.grade}>Grade 1-3</Text>
-          <Text style={styles.grade}>Grade 4-6</Text>
-        </View>
-
-        <Text style={styles.title}>Welcome Back</Text>
-        <Text style={styles.subtitle}>Continue your learning journey</Text>
-
-        <Field
-          label="EMAIL"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          placeholder="you@email.com"
-        />
-        <View style={styles.field}>
-          <Text style={styles.label}>PASSWORD</Text>
-          <View style={styles.inputContainer}>
-            <TextInput
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!showPassword}
-              placeholder="••••••••••"
-              placeholderTextColor="#aebee0"
-              style={styles.passwordInput}
-            />
-            <Pressable
-              onPress={() => setShowPassword(!showPassword)}
-              style={styles.eyeIcon}
-            >
-              <Ionicons
-                name={showPassword ? "eye" : "eye-off"}
-                size={20}
-                color="#aebee0"
-              />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        style={{ flex: 1 }}
+      >
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={styles.content}>
+            <Pressable onPress={() => router.back()}>
+              <Text style={styles.back}>‹ Back</Text>
             </Pressable>
+
+            <View style={styles.mascots}>
+              <Image
+                source={astro}
+                style={styles.mascot}
+                contentFit="contain"
+              />
+              <Image source={logo} style={styles.logo} contentFit="contain" />
+              <Image
+                source={stella}
+                style={styles.mascot}
+                contentFit="contain"
+              />
+            </View>
+
+            <Text style={styles.brand}>Biosphere Quest</Text>
+            <Text style={styles.tagline}>
+              Rocket your knowledge to the stars
+            </Text>
+
+            <View style={styles.grades}>
+              <Text style={styles.grade}>Grade 1-3</Text>
+              <Text style={styles.grade}>Grade 4-6</Text>
+            </View>
+
+            <Text style={styles.title}>Welcome Back</Text>
+            <Text style={styles.subtitle}>Continue your learning journey</Text>
+
+            <Field
+              label="EMAIL"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              placeholder="you@email.com"
+            />
+            <View style={styles.field}>
+              <Text style={styles.label}>PASSWORD</Text>
+              <View style={styles.inputContainer}>
+                <TextInput
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry={!showPassword}
+                  placeholder="••••••••••"
+                  placeholderTextColor="#aebee0"
+                  style={styles.passwordInput}
+                />
+                <Pressable
+                  onPress={() => setShowPassword(!showPassword)}
+                  style={styles.eyeIcon}
+                >
+                  <Ionicons
+                    name={showPassword ? "eye" : "eye-off"}
+                    size={20}
+                    color="#aebee0"
+                  />
+                </Pressable>
+              </View>
+            </View>
+
+            <Text style={styles.forgot}>Forgot Password?</Text>
+
+            <Pressable onPress={handleLogin} style={styles.primary}>
+              <Text style={styles.primaryText}>Log In</Text>
+            </Pressable>
+
+            <View style={styles.divider}>
+              <View style={styles.line} />
+              <Text style={styles.or}>or</Text>
+              <View style={styles.line} />
+            </View>
+
+            <Pressable style={styles.google} onPress={handleGoogleLogin}>
+              <Image
+                source={googleLogo}
+                style={styles.googleLogo}
+                contentFit="contain"
+              />
+              <Text style={styles.googleText}>Continue with Google</Text>
+            </Pressable>
+
+            <Text style={styles.footer}>
+              Don't have an account?{" "}
+              <Link href="/signup" style={styles.link}>
+                Sign Up Free
+              </Link>
+            </Text>
           </View>
-        </View>
-
-        <Text style={styles.forgot}>Forgot Password?</Text>
-
-        <Pressable onPress={handleLogin} style={styles.primary}>
-          <Text style={styles.primaryText}>Log In</Text>
-        </Pressable>
-
-        <View style={styles.divider}>
-          <View style={styles.line} />
-          <Text style={styles.or}>or</Text>
-          <View style={styles.line} />
-        </View>
-
-        <Pressable style={styles.google} onPress={handleGoogleLogin}>
-          <Image
-            source={googleLogo}
-            style={styles.googleLogo}
-            contentFit="contain"
-          />
-          <Text style={styles.googleText}>Continue with Google</Text>
-        </Pressable>
-
-        <Text style={styles.footer}>
-          Don't have an account?{" "}
-          <Link href="/signup" style={styles.link}>
-            Sign Up Free
-          </Link>
-        </Text>
-      </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </SafeAreaView>
   );
 }
@@ -171,10 +191,9 @@ function Field({
 const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#091426" },
   content: {
-    flex: 1,
     paddingHorizontal: 24,
     paddingVertical: 20,
-    justifyContent: "space-evenly",
+    gap: 8,
   },
   back: { color: "#e582ff", fontWeight: "800" },
   mascots: {
@@ -241,9 +260,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#5857e4",
     borderRadius: 9,
     alignItems: "center",
-    padding: 16,
+    padding: 12,
   },
-  primaryText: { color: "#fff", fontSize: 18, fontWeight: "900" },
+  primaryText: { color: "#fff", fontSize: 15, fontWeight: "900" },
   divider: { flexDirection: "row", alignItems: "center", gap: 12 },
   line: { flex: 1, height: 1, backgroundColor: "#aaa9c6" },
   or: { color: "#fff", fontWeight: "900" },
@@ -254,7 +273,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    padding: 12,
+    padding: 10,
   },
   googleLogo: { width: 22, height: 22, marginRight: 8 },
   googleText: { color: "#fff", fontWeight: "900", fontSize: 15 },
