@@ -47,6 +47,7 @@ export default function LoginScreen() {
         );
         if (result.type === "success") {
           console.log("Successfully logged in!");
+          router.replace("/home");
         }
       }
     } catch (err) {
